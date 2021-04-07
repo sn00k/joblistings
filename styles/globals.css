@@ -3,7 +3,7 @@
 html,
 body {
   padding: 0;
-  margin: 0;
+  margin: 50px 0 0;
   font-family: 'Roboto', Helvetica Neue, sans-serif;
 }
 
@@ -12,7 +12,6 @@ a {
   text-decoration: none;
 }
 
-/* Navbar */
-.navbar {
-  flex-grow: 1;
+main {
+  padding: 1rem 10vw;
 }
