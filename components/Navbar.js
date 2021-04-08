@@ -1,15 +1,12 @@
 import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import Link from 'next/link'
+import { Typography, Toolbar, AppBar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useContext } from 'react'
-import { UserContext } from '../lib/context'
 import { auth } from '../lib/firebase'
-import toast from 'react-hot-toast';
+import toast from 'react-hot-toast'
+import AuthCheck from './AuthCheck'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: '0 10vw'
   },
@@ -19,11 +16,15 @@ const useStyles = makeStyles({
   toolbar: {
     width: 928,
     margin: '0 auto'
+  },
+  links: {
+    '& > * + *': {
+      marginLeft: theme.spacing(3),
+    },
   }
-})
+}))
 
 export default function Navbar() {
-  const { user } = useContext(UserContext)
   const classes = useStyles()
 
   const handleLogOut = () => {
@@ -41,16 +42,28 @@ export default function Navbar() {
               Job Listings
             </Link>
           </Typography>
-          <Typography variant="button" color="inherit">
-            {user ? (
+          <Typography variant="button" color="inherit" className={classes.links}>
+            <AuthCheck
+              fallback={
+                <>
+                  <Link href="/jobs">
+                  All jobs
+                  </Link>
+                  <Link href="/login">
+                    Log in
+                  </Link>
+                </>
+              }>
+              <Link href="/jobs">
+                All jobs
+              </Link>
+              <Link href="/post">
+                Post a job
+              </Link>
               <Link href="#">
                 <a onClick={handleLogOut}>Log out</a>
               </Link>
-            ) : (
-              <Link href="/login">
-                Log in
-              </Link>
-            )}
+            </AuthCheck>
           </Typography>
         </Toolbar>
       </AppBar>
