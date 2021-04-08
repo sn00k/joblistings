@@ -1,9 +1,10 @@
 import { auth } from '../lib/firebase'
 import { useState } from 'react'
-import { Button, Card, CardContent, CardActions, TextField, Grid } from '@material-ui/core'
+import { Button, CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import CenteredCard from '../components/CenteredCard'
 
 const useStyles = makeStyles({
   actions: {
@@ -15,25 +16,9 @@ const useStyles = makeStyles({
 export default function Login() {
   return (
     <main>
-        <Grid
-          container
-          direction="row"
-          justify="center"
-        >
-          <h1>Login</h1>
-        </Grid>
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-            <Card>
-              <CardContent>
-                <LogInForm />
-              </CardContent>
-            </Card>
-        </Grid>
+      <CenteredCard>
+        <LogInForm />
+      </CenteredCard>
     </main>
   )
 }

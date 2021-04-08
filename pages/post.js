@@ -1,6 +1,7 @@
 import { useReducer } from 'react'
 import { formReducer } from '../lib/reducers'
-import { Grid, Card, CardContent } from '@material-ui/core'
+import AuthCheck from '../components/AuthCheck'
+import CenteredCard from '../components/CenteredCard'
 
 const initialValue = {
   positionType: null,
@@ -14,6 +15,16 @@ const initialValue = {
 }
 
 export default function Post() {
+  return (
+    <main>
+      <AuthCheck>
+        <PostForm />
+      </AuthCheck>
+    </main>
+  )
+}
+
+function PostForm() {
   const [state, dispatch] = useReducer(formReducer, initialValue)
 
   const handleInput = (e) => {
@@ -22,35 +33,9 @@ export default function Post() {
 
   return (
     <main>
-      {
-         // TODO:
-         // REFACTOR THIS TO A COMPONENT THAT RENDERS ITS CHILDREN
-      }
-      <Grid
-        container
-        direction="row"
-        justify="center"
-      >
-        <h1>Post new job</h1>
-      </Grid>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-      >
-        <Card>
-          <CardContent>
-            <PostForm />
-          </CardContent>
-        </Card>
-      </Grid>
+      <CenteredCard>
+        PostContent
+      </CenteredCard>
     </main>
-  )
-}
-
-function PostForm() {
-  return (
-    null
   )
 }
