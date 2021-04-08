@@ -60,7 +60,7 @@ export default function Navbar() {
               <Link href="/post">
                 Post a job
               </Link>
-              <Link href="#">
+              <Link href="/">
                 <a onClick={handleLogOut}>Log out</a>
               </Link>
             </AuthCheck>
