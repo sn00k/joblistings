@@ -34,7 +34,7 @@ function LogInForm() {
   const classes = useStyles()
   const router = useRouter()
   
-  const handleSubmitForm = async (e) => {
+  const handleSubmitForm = (e) => {
     e.preventDefault()
 
     if (!isFormValid) {
