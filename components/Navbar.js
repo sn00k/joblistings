@@ -27,10 +27,13 @@ export default function Navbar() {
   const classes = useStyles()
   const auth = useAuth()
 
-  const handleLogOut = () => {
-    auth.signOut()
+  const handleSignout = () => {
+    auth.signout()
       .then(() => toast.success('Logged out successfully!'))
-      .catch((error) => console.log({error}))
+      .catch((error) => {
+        console.warn({error})
+        toast.error('Something went wrong!')
+      })
   }
   
   return (
@@ -52,7 +55,7 @@ export default function Navbar() {
                   Post a job
                 </Link>
                 <Link href="/">
-                  <a onClick={() => auth.signout()}>Log out</a>
+                  <a onClick={handleSignout}>Log out</a>
                 </Link>  
               </>
             ) : (
