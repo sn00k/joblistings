@@ -9,15 +9,6 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import kebabCase from 'lodash.kebabcase';
 
-const initialValue = {
-  positionType: 'fullTime',
-  location: '',
-  title: '',
-  description: '',
-  phone: '',
-  email: ''
-}
-
 const useStyles = makeStyles({
   root: {
     padding: 50
@@ -42,7 +33,16 @@ export default function PostForm() {
 }
 
 function CreateNewPost() {
-  const [state, dispatch] = useReducer(formReducer, initialValue)
+  const initialValues = {
+    positionType: 'fullTime',
+    location: '',
+    title: '',
+    description: '',
+    phone: '',
+    email: ''
+  }
+  
+  const [state, dispatch] = useReducer(formReducer, initialValues)
   const [locationError, setLocationError] = useState('')
 
   const router = useRouter()
