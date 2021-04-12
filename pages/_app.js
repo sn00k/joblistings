@@ -3,13 +3,10 @@ import Head from 'next/head'
 import Navbar from '../components/Navbar'
 import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
-import { UserContext } from '../lib/context'
-import { useUserData } from '../lib/hooks'
+import { ProvideAuth } from '../lib/hooks'
 import { Box } from '@material-ui/core'
 
 function MyApp({ Component, pageProps }) {
-  const userData = useUserData()
-
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -19,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <UserContext.Provider value={userData}>
+    <ProvideAuth>
       <Head>
         <title>Job Listings</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
@@ -29,7 +26,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </Box>
       <Toaster />
-    </UserContext.Provider>
+    </ProvideAuth>
   )
 }
 

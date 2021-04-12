@@ -8,7 +8,7 @@ export default function CenteredCard(props) {
         direction="row"
         justify="center"
       >
-        <h1>Post new job</h1>
+        <h1>{props.title}</h1>
       </Grid>
       <Grid
         container

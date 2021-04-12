@@ -2,9 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { Typography, Toolbar, AppBar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { auth } from '../lib/firebase'
 import toast from 'react-hot-toast'
-import AuthCheck from './AuthCheck'
+import { useAuth } from '../lib/hooks'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
   const classes = useStyles()
+  const auth = useAuth()
 
   const handleLogOut = () => {
     auth.signOut()
@@ -43,27 +43,23 @@ export default function Navbar() {
             </Link>
           </Typography>
           <Typography variant="button" color="inherit" className={classes.links}>
-            <AuthCheck
-              fallback={
-                <>
-                  <Link href="/jobs">
-                  All jobs
-                  </Link>
-                  <Link href="/login">
-                    Log in
-                  </Link>
-                </>
-              }>
-              <Link href="/jobs">
-                All jobs
+            <Link href="/jobs">
+              All jobs
+            </Link>
+            {auth.user ? (
+              <>
+                <Link href="/post">
+                  Post a job
+                </Link>
+                <Link href="/">
+                  <a onClick={() => auth.signout()}>Log out</a>
+                </Link>  
+              </>
+            ) : (
+              <Link href="/login">
+                Log in
               </Link>
-              <Link href="/post">
-                Post a job
-              </Link>
-              <Link href="/">
-                <a onClick={handleLogOut}>Log out</a>
-              </Link>
-            </AuthCheck>
+            )}
           </Typography>
         </Toolbar>
       </AppBar>

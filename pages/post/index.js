@@ -1,7 +1,7 @@
 import { useReducer, useState } from 'react'
 import { formReducer } from '../../lib/reducers'
+import { useRequireAuth } from '../../lib/hooks'
 import { auth, firestore, serverTimestamp } from '../../lib/firebase'
-import AuthCheck from '../../components/AuthCheck'
 import CenteredCard from '../../components/CenteredCard'
 import { Grid, Select, MenuItem, InputLabel, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -28,15 +28,15 @@ const useStyles = makeStyles({
 })
 
 export default function PostForm() {
-  if (!auth.currentUser) {
-    return null
-  }
+  const auth = useRequireAuth()
+  console.log({auth})
+  if (!auth.user) {
+    return <p>Loading...</p>
+  } 
   
   return (
     <main>
-      <AuthCheck>
-        <CreateNewPost />
-      </AuthCheck>
+      <CreateNewPost />
     </main>
   )
 }
@@ -66,10 +66,10 @@ function CreateNewPost() {
     }
 
     const ref = firestore
-    .collection('users')
-    .doc(auth.currentUser.email)
-    .collection('posts')
-    .doc(slug)
+      .collection('users')
+      .doc(auth.currentUser.email)
+      .collection('posts')
+      .doc(slug)
 
     const data = {
       uid: auth.currentUser.uid,
@@ -89,7 +89,7 @@ function CreateNewPost() {
 
   return (
     <main>
-      <CenteredCard>
+      <CenteredCard title="Post new job">
         <section>
           <form onSubmit={handleSubmitForm}>
             <Grid spacing={3} container className={classes.root}>

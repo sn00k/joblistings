@@ -1,4 +1,5 @@
-import { auth, firestore } from '../lib/firebase'
+import { firestore } from '../lib/firebase'
+import { useAuth } from '../lib/hooks'
 import { useState } from 'react'
 import { Button, CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -16,7 +17,7 @@ const useStyles = makeStyles({
 export default function Login() {
   return (
     <main>
-      <CenteredCard>
+      <CenteredCard title="Login/Create account">
         <LogInForm />
       </CenteredCard>
     </main>
@@ -31,6 +32,7 @@ function LogInForm() {
   const [newUser, setNewUser] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
 
+  const auth = useAuth()
   const classes = useStyles()
   const router = useRouter()
   
@@ -44,9 +46,8 @@ function LogInForm() {
 
     if (newUser) {
       // new user
-
       auth
-        .createUserWithEmailAndPassword(formEmail, formPassword)
+        .signup(formEmail, formPassword)
         .then(({user}) => {
           const userDoc = firestore.doc(`users/${user.email}`)
 
@@ -64,7 +65,7 @@ function LogInForm() {
     } else {
       // login
       auth
-        .signInWithEmailAndPassword(formEmail, formPassword)
+        .signin(formEmail, formPassword)
         .then(() => {
           router.push('/')
           toast.success('Logged in successfully!')
