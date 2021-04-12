@@ -1,6 +1,7 @@
 import { firestore } from '../lib/firebase'
+import { formReducer } from '../lib/reducers'
 import { useAuth } from '../lib/hooks'
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 import { Button, CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
@@ -25,8 +26,11 @@ export default function Login() {
 }
 
 function LogInForm() {
-  const [formEmail, setFormEmail] = useState('')
-  const [formPassword, setFormPassword] = useState('')
+  const initialValues = {
+    email: '',
+    password: ''
+  }
+  const [state, dispatch] = useReducer(formReducer, initialValues)
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [newUser, setNewUser] = useState(false)
@@ -47,7 +51,7 @@ function LogInForm() {
     if (newUser) {
       // new user
       auth
-        .signup(formEmail, formPassword)
+        .signup(state.email, state.password)
         .then(({user}) => {
           const userDoc = firestore.doc(`users/${user.email}`)
 
@@ -65,7 +69,7 @@ function LogInForm() {
     } else {
       // login
       auth
-        .signin(formEmail, formPassword)
+        .signin(state.email, state.password)
         .then(() => {
           router.push('/')
           toast.success('Logged in successfully!')
@@ -82,7 +86,7 @@ function LogInForm() {
   const handleOnEmailChange = async (e) => {
     const val = e.target.value.toLowerCase()
     const regex = /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/
-    setFormEmail(val)
+    dispatch({ type: "HANDLE_INPUT", field: e.target.name, payload: val })
     setEmailError('Invalid email address')
 
     if (regex.test(val)) {
@@ -90,8 +94,8 @@ function LogInForm() {
       const { exists } = await ref.get()
 
       if (!exists) {
-        setIsFormValid(true)
         setEmailError('')
+        setIsFormValid(!passwordError)
       } else {
         setEmailError('That email already exists!')
       }
@@ -100,12 +104,12 @@ function LogInForm() {
 
   const handleOnPasswordChange = (e) => {
     const val = e.target.value
-    setFormPassword(val)
+    dispatch({ type: "HANDLE_INPUT", field: e.target.name, payload: val })
     setPasswordError('Password too short')
 
     if (val.length > 3) {
       setPasswordError('')
-      setIsFormValid(true)
+      setIsFormValid(!emailError)
     }
   }
 
@@ -116,20 +120,24 @@ function LogInForm() {
           <Grid item xs={12}>
             <TextField
               label="Email"
+              name="email"
               fullWidth
               error={!!emailError}
               helperText={emailError}
               onChange={handleOnEmailChange}
+              value={state.email || ''}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               label="Password"
+              name="password"
               type="password"
               fullWidth
               error={!!passwordError}
               helperText={passwordError}
               onChange={handleOnPasswordChange}
+              value={state.password || ''}
             />
           </Grid>
         </Grid>
