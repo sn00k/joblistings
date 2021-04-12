@@ -1,4 +1,4 @@
-import { auth } from '../lib/firebase'
+import { auth, firestore } from '../lib/firebase'
 import { useState } from 'react'
 import { Button, CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -44,34 +44,56 @@ function LogInForm() {
 
     if (newUser) {
       // new user
+
       auth
         .createUserWithEmailAndPassword(formEmail, formPassword)
-        .catch((error) => console.log({error}))
+        .then(({user}) => {
+          const userDoc = firestore.doc(`users/${user.email}`)
 
-      router.push('/')
-      toast.success('New account created!')
+          const batch = firestore.batch()
+          batch.set(userDoc, { uid: user.uid })
+          batch.commit()
+
+          router.push('/')
+          toast.success('New account created!')
+        })
+        .catch((error) => {
+          console.warn({error})
+          toast.error('Something went wrong!')
+        })
     } else {
       // login
       auth
         .signInWithEmailAndPassword(formEmail, formPassword)
-        .catch((error) => console.log({error}))
-
-      router.push('/')
-      toast.success('Logged in successfully!')
+        .then(() => {
+          router.push('/')
+          toast.success('Logged in successfully!')
+        })
+        .catch((error) => {
+          console.warn({error})
+          toast.error('Something went wrong!')
+        })
     }
 
     setNewUser(false)
   }
 
-  const handleOnEmailChange = (e) => {
+  const handleOnEmailChange = async (e) => {
     const val = e.target.value.toLowerCase()
     const regex = /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/
     setFormEmail(val)
     setEmailError('Invalid email address')
 
     if (regex.test(val)) {
-      setIsFormValid(true)
-      setEmailError('')
+      const ref = firestore.doc(`users/${val}`)
+      const { exists } = await ref.get()
+
+      if (!exists) {
+        setIsFormValid(true)
+        setEmailError('')
+      } else {
+        setEmailError('That email already exists!')
+      }
     }
   }
 
