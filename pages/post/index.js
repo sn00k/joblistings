@@ -1,9 +1,13 @@
 import { useReducer, useState } from 'react'
-import { formReducer } from '../lib/reducers'
-import AuthCheck from '../components/AuthCheck'
-import CenteredCard from '../components/CenteredCard'
-import { Grid, Select, MenuItem, InputLabel, TextField, TextareaAutosize } from '@material-ui/core'
+import { formReducer } from '../../lib/reducers'
+import { auth, firestore, serverTimestamp } from '../../lib/firebase'
+import AuthCheck from '../../components/AuthCheck'
+import CenteredCard from '../../components/CenteredCard'
+import { Grid, Select, MenuItem, InputLabel, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import kebabCase from 'lodash.kebabcase';
 
 const initialValue = {
   positionType: 'fullTime',
@@ -23,21 +27,29 @@ const useStyles = makeStyles({
   }
 })
 
-export default function Post() {
+export default function PostForm() {
+  if (!auth.currentUser) {
+    return null
+  }
+  
   return (
     <main>
       <AuthCheck>
-        <PostForm />
+        <CreateNewPost />
       </AuthCheck>
     </main>
   )
 }
 
-function PostForm() {
+function CreateNewPost() {
   const [state, dispatch] = useReducer(formReducer, initialValue)
   const [locationError, setLocationError] = useState('')
 
+  const router = useRouter()
   const classes = useStyles()
+
+  // url safe slug
+  const slug = encodeURI(kebabCase(state.title))
 
   const handleInput = (e) => {
     if (locationError) {
@@ -52,7 +64,27 @@ function PostForm() {
     if (state.location.length === 0) {
       setLocationError('Location is required.')
     }
-    console.log({state})
+
+    const ref = firestore
+    .collection('users')
+    .doc(auth.currentUser.email)
+    .collection('posts')
+    .doc(slug)
+
+    const data = {
+      uid: auth.currentUser.uid,
+      createdAt: serverTimestamp(),
+      ...state
+    }
+
+    try {
+      await ref.set(data)
+      toast.success('Created new job post successfully!')
+      router.push(`/post/${slug}`)
+    } catch (error) {
+      console.warn({error});
+      toast.error('Something went wrong!')
+    }
   }
 
   return (
