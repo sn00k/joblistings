@@ -2,7 +2,7 @@ import { useRequireAuth, useAuth, useForm } from '../../lib/hooks'
 import { firestore, serverTimestamp } from '../../lib/firebase'
 import { validate, EMAIL_REGEX_STRING, PHONE_REGEX_STRING } from '../../lib/util'
 import CenteredCard from '../../components/CenteredCard'
-import { Grid, Select, MenuItem, InputLabel, TextField, Button } from '@material-ui/core'
+import { Grid, Select, MenuItem, InputLabel, TextField, Button, CardActions } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
@@ -210,14 +210,16 @@ function CreateNewPost() {
                   }}
                 />
               </Grid>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={Object.keys(errors).length > 0}
-              >
+              <CardActions className={classes.actions}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={Object.keys(errors).length > 0}
+                >
                   Post
-              </Button>
+                </Button>
+              </CardActions>
             </Grid>
           </form>
         </section>
