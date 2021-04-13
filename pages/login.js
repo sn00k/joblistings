@@ -1,7 +1,7 @@
 import { firestore } from '../lib/firebase'
-import { formReducer } from '../lib/reducers'
-import { useAuth } from '../lib/hooks'
-import { useState, useReducer } from 'react'
+import { useAuth, useForm } from '../lib/hooks'
+import { validate, EMAIL_REGEX_STRING } from '../lib/util'
+import { useState } from 'react'
 import { Button, CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
@@ -30,28 +30,23 @@ function LogInForm() {
     email: '',
     password: ''
   }
-  const [state, dispatch] = useReducer(formReducer, initialValues)
-  const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
   const [newUser, setNewUser] = useState(false)
-  const [isFormValid, setIsFormValid] = useState(false)
 
   const auth = useAuth()
   const classes = useStyles()
   const router = useRouter()
   
   const handleSubmitForm = (e) => {
-    e.preventDefault()
-
-    if (!isFormValid) {
+    if (Object.keys(errors).length > 0) {
       toast.error('Something went wrong when submitting the form.')
+      console.warn({errors});
       return
     }
 
     if (newUser) {
       // new user
       auth
-        .signup(state.email, state.password)
+        .signup(values.email.data, values.password.data)
         .then(({user}) => {
           const userDoc = firestore.doc(`users/${user.email}`)
 
@@ -69,7 +64,7 @@ function LogInForm() {
     } else {
       // login
       auth
-        .signin(state.email, state.password)
+        .signin(values.email.data, values.password.data)
         .then(() => {
           router.push('/')
           toast.success('Logged in successfully!')
@@ -83,49 +78,34 @@ function LogInForm() {
     setNewUser(false)
   }
 
-  const handleOnEmailChange = async (e) => {
-    const val = e.target.value.toLowerCase()
-    const regex = /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/
-    dispatch({ type: "HANDLE_INPUT", field: e.target.name, payload: val })
-    setEmailError('Invalid email address')
-
-    if (regex.test(val)) {
-      const ref = firestore.doc(`users/${val}`)
-      const { exists } = await ref.get()
-
-      if (!exists) {
-        setEmailError('')
-        setIsFormValid(!passwordError)
-      } else {
-        setEmailError('That email already exists!')
-      }
-    }
-  }
-
-  const handleOnPasswordChange = (e) => {
-    const val = e.target.value
-    dispatch({ type: "HANDLE_INPUT", field: e.target.name, payload: val })
-    setPasswordError('Password too short')
-
-    if (val.length > 3) {
-      setPasswordError('')
-      setIsFormValid(!emailError)
-    }
-  }
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(initialValues, handleSubmitForm, validate)
 
   return (
     <section>
-      <form onSubmit={handleSubmitForm} noValidate autoComplete="off">
+      <form onSubmit={handleSubmit} noValidate autoComplete="off">
         <Grid spacing={3} container>
           <Grid item xs={12}>
             <TextField
               label="Email"
               name="email"
+              type="email"
               fullWidth
-              error={!!emailError}
-              helperText={emailError}
-              onChange={handleOnEmailChange}
-              value={state.email || ''}
+              required
+              error={!!errors.email}
+              helperText={errors.email}
+              onChange={handleChange}
+              onFocus={() => validate(values)}
+              value={values.email.data || ''}
+              inputProps={{
+                'data-required': true,
+                'data-test': true,
+                'data-regex': EMAIL_REGEX_STRING
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -134,10 +114,16 @@ function LogInForm() {
               name="password"
               type="password"
               fullWidth
-              error={!!passwordError}
-              helperText={passwordError}
-              onChange={handleOnPasswordChange}
-              value={state.password || ''}
+              required
+              error={!!errors.password}
+              helperText={errors.password}
+              onChange={handleChange}
+              onFocus={() => validate(values)}
+              value={values.password.data || ''}
+              inputProps={{
+                'data-required': true,
+                'data-minlength': 6
+              }}
             />
           </Grid>
         </Grid>
@@ -147,16 +133,18 @@ function LogInForm() {
               variant="contained"
               color="primary"
               type="submit"
-              disabled={!isFormValid}>
-                Log In
+              disabled={Object.keys(errors).length > 0}
+            >
+              Log In
             </Button>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              disabled={!isFormValid}
-              onClick={() => setNewUser(true)}>
-                New Account
+              disabled={Object.keys(errors).length > 0}
+              onClick={() => setNewUser(true)}
+            >
+              New Account
             </Button>
           </CardActions>
         </Grid>
