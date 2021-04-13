@@ -1,7 +1,7 @@
 import { useReducer, useState } from 'react'
 import { formReducer } from '../../lib/reducers'
-import { useRequireAuth } from '../../lib/hooks'
-import { auth, firestore, serverTimestamp } from '../../lib/firebase'
+import { useRequireAuth, useAuth } from '../../lib/hooks'
+import { firestore, serverTimestamp } from '../../lib/firebase'
 import CenteredCard from '../../components/CenteredCard'
 import { Grid, Select, MenuItem, InputLabel, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 
 export default function PostForm() {
   const auth = useRequireAuth()
-  console.log({auth})
+
   if (!auth.user) {
     return <p>Loading...</p>
   } 
@@ -48,6 +48,8 @@ function CreateNewPost() {
   const router = useRouter()
   const classes = useStyles()
 
+  const auth = useAuth()
+
   // url safe slug
   const slug = encodeURI(kebabCase(state.title))
 
@@ -67,12 +69,12 @@ function CreateNewPost() {
 
     const ref = firestore
       .collection('users')
-      .doc(auth.currentUser.email)
+      .doc(auth.user.email)
       .collection('posts')
       .doc(slug)
 
     const data = {
-      uid: auth.currentUser.uid,
+      uid: auth.user.uid,
       createdAt: serverTimestamp(),
       ...state
     }
