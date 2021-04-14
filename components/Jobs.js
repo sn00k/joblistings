@@ -24,7 +24,7 @@ function JobItem({ job }) {
               </Typography>
               <Box display="flex">
                 <Box flexGrow="1" color={job.position === 'fullTime' ? 'success.main' : 'inherit'}>
-                  <Typography variant="caption" flexGrow="1">
+                  <Typography variant="caption">
                     {printPositionType(job.position)}
                   </Typography>
                 </Box>
