@@ -6,22 +6,20 @@ import toast from 'react-hot-toast'
 import { useAuth } from '../lib/hooks'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '0 10vw'
+  toolbar: {
+    // TODO: adjust on < desktops
+    marginLeft: theme.spacing(12),
+    marginRight: theme.spacing(12)
   },
   homeLink: {
     flexGrow: 1
   },
-  toolbar: {
-    width: 928,
-    margin: '0 auto'
-  },
   links: {
     '& > * + *': {
       marginLeft: theme.spacing(3),
-    },
+    }
   }
-}))
+}));
 
 export default function Navbar() {
   const classes = useStyles()
@@ -38,7 +36,7 @@ export default function Navbar() {
   
   return (
     <nav>
-      <AppBar className={classes.root} position="fixed">
+      <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
           <Typography className={classes.homeLink} variant="h6" color="inherit">
             <Link href="/">
