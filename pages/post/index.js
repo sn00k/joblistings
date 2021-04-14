@@ -2,7 +2,8 @@ import { useRequireAuth, useAuth, useForm } from '../../lib/hooks'
 import { firestore, serverTimestamp } from '../../lib/firebase'
 import { validate, EMAIL_REGEX_STRING, PHONE_REGEX_STRING } from '../../lib/util'
 import CenteredCard from '../../components/CenteredCard'
-import { Grid, Select, MenuItem, InputLabel, TextField, Button, CardActions } from '@material-ui/core'
+import { Button as SubmitButton } from '../../components/ContainedPrimarySubmitBtn'
+import { Grid, Select, MenuItem, InputLabel, TextField, CardActions } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
@@ -81,10 +82,9 @@ function CreateNewPost() {
     const data = {
       uid: auth.user.uid,
       createdAt: serverTimestamp(),
+      slug,
       ...formData
     }
-
-    console.log({data});
 
     try {
       await ref.set(data)
@@ -211,14 +211,9 @@ function CreateNewPost() {
                 />
               </Grid>
               <CardActions className={classes.actions}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={Object.keys(errors).length > 0}
-                >
+                <SubmitButton disabled={Object.keys(errors).length > 0}>
                   Post
-                </Button>
+                </SubmitButton>
               </CardActions>
             </Grid>
           </form>

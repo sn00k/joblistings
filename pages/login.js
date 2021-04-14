@@ -2,11 +2,12 @@ import { firestore } from '../lib/firebase'
 import { useAuth, useForm } from '../lib/hooks'
 import { validate, EMAIL_REGEX_STRING } from '../lib/util'
 import { useState } from 'react'
-import { Button, CardActions, TextField, Grid } from '@material-ui/core'
+import { CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import CenteredCard from '../components/CenteredCard'
+import { Button as SubmitButton } from '../components/ContainedPrimarySubmitBtn'
 
 const useStyles = makeStyles({
   actions: {
@@ -129,23 +130,13 @@ function LogInForm() {
         </Grid>
         <Grid item xs={12}>
           <CardActions className={classes.actions}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={Object.keys(errors).length > 0}
-            >
-              Log In
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
+            <SubmitButton disabled={Object.keys(errors).length > 0}>Log In</SubmitButton>
+            <SubmitButton
               disabled={Object.keys(errors).length > 0}
               onClick={() => setNewUser(true)}
             >
               New Account
-            </Button>
+            </SubmitButton>
           </CardActions>
         </Grid>
       </form>
