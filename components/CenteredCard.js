@@ -1,6 +1,8 @@
 import { Grid, Card, CardContent } from '@material-ui/core'
 
 export default function CenteredCard(props) {
+  const defaultMaxWidth = 928
+
   return (
     <>
       <Grid
@@ -15,9 +17,9 @@ export default function CenteredCard(props) {
         direction="row"
         justify="center"
         alignItems="center"
-        style={{ maxWidth: 928, margin: 'auto' }}
+        style={{ maxWidth: props.maxWidth ?? defaultMaxWidth, margin: 'auto' }}
       >
-        <Card>
+        <Card style={{ width: props.maxWidth ?? defaultMaxWidth }}>
           <CardContent>
             {props.children}
           </CardContent>

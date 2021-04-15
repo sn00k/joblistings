@@ -1,4 +1,4 @@
-import { useRequireAuth, useAuth, useForm } from '../../lib/hooks'
+import { useRequireAuth, useAuth, useForm, useCheckMobileView } from '../../lib/hooks'
 import { firestore, serverTimestamp } from '../../lib/firebase'
 import { validate, EMAIL_REGEX_STRING, PHONE_REGEX_STRING } from '../../lib/util'
 import CenteredCard from '../../components/CenteredCard'
@@ -52,6 +52,7 @@ function CreateNewPost() {
   const router = useRouter()
   const classes = useStyles()
   const auth = useAuth()
+  const mobileView = useCheckMobileView()
 
   const handleSubmitForm = async () => {
     let formData = {}
@@ -108,10 +109,15 @@ function CreateNewPost() {
 
   return (
     <main>
-      <CenteredCard title="Post new job">
+      <CenteredCard title="Post new job" maxWidth={mobileView ? '100%' : 928}>
         <section>
           <form onSubmit={handleSubmit} noValidate autoComplete="off">
-            <Grid spacing={3} container className={classes.root}>
+            <Grid
+              container
+              spacing={3}
+              className={classes.root}
+              direction={mobileView ? 'column' : 'row'}
+            >
               <Grid item xs={6}>
                 <InputLabel id="position">Position</InputLabel>
                 <Select
@@ -132,6 +138,7 @@ function CreateNewPost() {
                   name="location"
                   type="text"
                   required
+                  fullWidth={!!mobileView}
                   error={!!errors.location}
                   helperText={errors.location}
                   onChange={handleChange}
@@ -148,6 +155,7 @@ function CreateNewPost() {
                   name="title"
                   type="text"
                   required
+                  fullWidth={!!mobileView}
                   error={!!errors.title}
                   helperText={errors.title}
                   onChange={handleChange}
@@ -177,11 +185,12 @@ function CreateNewPost() {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={mobileView ? 12 : 6}>
                 <TextField
                   label="Phone"
                   name="phone"
                   type="text"
+                  fullWidth={!!mobileView}
                   error={!!errors.phone}
                   helperText={errors.phone}
                   onChange={handleChange}
@@ -194,11 +203,12 @@ function CreateNewPost() {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={mobileView ? 12 : 6}>
                 <TextField
                   label="Email"
                   name="email"
                   type="text"
+                  fullWidth={!!mobileView}
                   error={!!errors.email}
                   helperText={errors.email}
                   onChange={handleChange}

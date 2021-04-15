@@ -16,10 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   links: {
     '& > * + *': {
-      marginLeft: theme.spacing(3),
-      'a': {
-        color: 'inherit'
-      }
+      marginLeft: theme.spacing(3)
     }
   }
 }))
@@ -42,7 +39,7 @@ export default function Navbar() {
 
   const getDrawerChoices = () => {
     return (
-      <Typography variant="button" color="inherit">
+      <Typography variant="button">
         <Link href="/jobs">
           <MenuItem>All jobs</MenuItem>
         </Link>
@@ -51,8 +48,8 @@ export default function Navbar() {
             <Link href="/post">
               <MenuItem>Post a job</MenuItem>
             </Link>
-            <Link href="/" onClick={handleSignout}>
-              <MenuItem>Log out</MenuItem>
+            <Link href="/">
+              <MenuItem onClick={handleSignout}>Log out</MenuItem>
             </Link>  
           </>
         ) : (
@@ -98,7 +95,7 @@ export default function Navbar() {
           </Box>
         </Drawer>
         <Typography className={classes.homeLink} variant="h6">
-          <Link href="/" color="inherit">
+          <Link href="/">
             Job Listings
           </Link>
         </Typography>
@@ -110,25 +107,25 @@ export default function Navbar() {
     return (
       <Toolbar className={classes.toolbar}>
         <Typography className={classes.homeLink} variant="h6">
-          <Link href="/" color="inherit">
+          <Link href="/">
             Job Listings
           </Link>
         </Typography>
         <Typography variant="button" className={classes.links}>
-          <Link href="/jobs" color="inherit">
+          <Link href="/jobs">
             All jobs
           </Link>
           {auth.user ? (
             <>
-              <Link href="/post" color="inherit">
+              <Link href="/post">
                 Post a job
               </Link>
-              <Link href="/" color="inherit" onClick={handleSignout}>
-                Log out
+              <Link href="/">
+                <a onClick={handleSignout}>Log out</a>
               </Link>  
             </>
           ) : (
-            <Link href="/login" color="inherit">
+            <Link href="/login">
               Log in
             </Link>
           )}
