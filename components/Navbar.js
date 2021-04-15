@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Typography, Toolbar, AppBar, IconButton, Drawer, MenuItem, Box } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { makeStyles } from '@material-ui/core/styles'
 import toast from 'react-hot-toast'
-import { useAuth } from '../lib/hooks'
+import { useAuth, useCheckMobileView } from '../lib/hooks'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -25,27 +25,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar() {
-  const [state, setState] = useState({
-    mobileView: false,
-    drawerOpen: false
-  })
-  const { mobileView, drawerOpen } = state
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const mobileView = useCheckMobileView()
 
   const classes = useStyles()
   const auth = useAuth()
-
-  useEffect(() => {
-    const setResponsiveness = () => {
-      return window.innerWidth < 1024
-        ? setState((prevState) => ({ ...prevState, mobileView: true }))
-        : setState((prevState) => ({ ...prevState, mobileView: false }))
-    }
-
-    setResponsiveness()
-    window.addEventListener('resize', () => setResponsiveness())
-
-    return () => window.removeEventListener('resize', () => setResponsiveness())
-  }, [])
 
   const handleSignout = () => {
     auth.signout()
@@ -82,11 +66,11 @@ export default function Navbar() {
 
   const displayMobile = () => {
     const handleDrawerOpen = () => {
-      setState((prevState) => ({ ...prevState, drawerOpen: true }))
+      setDrawerOpen(true)
     }
 
     const handleDrawerClose = () => {
-      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+      setDrawerOpen(false);
     }
 
     return (
