@@ -15,6 +15,7 @@ export default function CenteredCard(props) {
         direction="row"
         justify="center"
         alignItems="center"
+        style={{ maxWidth: 928, margin: 'auto' }}
       >
         <Card>
           <CardContent>

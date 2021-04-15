@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <Navbar />
-      <Box width={928} mx="auto">
+      <Box mx="auto">
         <Component {...pageProps} />
       </Box>
       <Toaster />
