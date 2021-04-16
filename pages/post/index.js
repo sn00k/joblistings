@@ -3,6 +3,7 @@ import {
   useAuth,
   useForm,
   useCheckMobileView,
+  useCheckIfDocExists,
 } from '../../lib/hooks'
 import { firestore, serverTimestamp } from '../../lib/firebase'
 import {
@@ -121,6 +122,10 @@ function CreateNewPost() {
 
   // url safe slug
   const slug = encodeURI(kebabCase(values.title.data))
+  const slugError = useCheckIfDocExists(
+    `users/${auth.user.email}/posts/${slug}`,
+    slug,
+  )
 
   return (
     <main>
@@ -174,8 +179,12 @@ function CreateNewPost() {
                   type="text"
                   required
                   fullWidth={!!mobileView}
-                  error={!!errors.title}
-                  helperText={errors.title}
+                  error={!!errors.title || !!slugError}
+                  helperText={
+                    errors.title ||
+                    (slugError &&
+                      'A job post with that title already exists!')
+                  }
                   onChange={handleChange}
                   value={values.title.data || ''}
                   inputProps={{
@@ -240,7 +249,9 @@ function CreateNewPost() {
               </Grid>
               <CardActions className={classes.actions}>
                 <SubmitButton
-                  disabled={Object.keys(errors).length > 0}
+                  disabled={
+                    Object.keys(errors).length > 0 || slugError
+                  }
                 >
                   Post
                 </SubmitButton>
