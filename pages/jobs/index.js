@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import { firestore, fromMillis, postToJSON } from '../../lib/firebase'
+import {
+  firestore,
+  fromMillis,
+  jobPostToJSON,
+} from '../../lib/firebase'
 import Jobs from '../../components/Jobs'
 import Loader from '../../components/Loader'
 import { Grid, Box, Button } from '@material-ui/core'
@@ -12,7 +16,7 @@ export async function getServerSideProps(context) {
     .orderBy('createdAt', 'desc')
     .limit(LIMIT)
 
-  const jobs = (await postsQuery.get()).docs.map(postToJSON)
+  const jobs = (await postsQuery.get()).docs.map(jobPostToJSON)
 
   return {
     props: { jobs },
