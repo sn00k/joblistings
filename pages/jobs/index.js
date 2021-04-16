@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
   const jobs = (await postsQuery.get()).docs.map(postToJSON)
 
   return {
-    props: { jobs }
+    props: { jobs },
   }
 }
 
@@ -25,7 +25,7 @@ export default function AllJobs(props) {
   return (
     <main>
       <h1 style={{ textAlign: 'center' }}>Showing x of y jobs</h1>
-      <Jobs jobs={jobs}/>
+      <Jobs jobs={jobs} />
     </main>
   )
 }

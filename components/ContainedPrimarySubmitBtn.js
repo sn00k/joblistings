@@ -13,6 +13,4 @@ const Button = (props) => {
   )
 }
 
-export {
-  Button
-}
+export { Button }

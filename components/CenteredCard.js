@@ -5,11 +5,7 @@ export default function CenteredCard(props) {
 
   return (
     <>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-      >
+      <Grid container direction="row" justify="center">
         <h1>{props.title}</h1>
       </Grid>
       <Grid
@@ -17,12 +13,13 @@ export default function CenteredCard(props) {
         direction="row"
         justify="center"
         alignItems="center"
-        style={{ maxWidth: props.maxWidth ?? defaultMaxWidth, margin: 'auto' }}
+        style={{
+          maxWidth: props.maxWidth ?? defaultMaxWidth,
+          margin: 'auto',
+        }}
       >
         <Card style={{ width: props.maxWidth ?? defaultMaxWidth }}>
-          <CardContent>
-            {props.children}
-          </CardContent>
+          <CardContent>{props.children}</CardContent>
         </Card>
       </Grid>
     </>

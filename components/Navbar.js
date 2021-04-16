@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Typography, Toolbar, AppBar, IconButton, Drawer, MenuItem, Box } from '@material-ui/core'
+import {
+  Typography,
+  Toolbar,
+  AppBar,
+  IconButton,
+  Drawer,
+  MenuItem,
+  Box,
+} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { makeStyles } from '@material-ui/core/styles'
 import toast from 'react-hot-toast'
@@ -9,16 +17,16 @@ import { useAuth, useCheckMobileView } from '../lib/hooks'
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     width: 928,
-    margin: 'auto'
+    margin: 'auto',
   },
   homeLink: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   links: {
     '& > * + *': {
-      marginLeft: theme.spacing(3)
-    }
-  }
+      marginLeft: theme.spacing(3),
+    },
+  },
 }))
 
 export default function Navbar() {
@@ -29,10 +37,11 @@ export default function Navbar() {
   const auth = useAuth()
 
   const handleSignout = () => {
-    auth.signout()
+    auth
+      .signout()
       .then(() => toast.success('Logged out successfully!'))
       .catch((error) => {
-        console.warn({error})
+        console.warn({ error })
         toast.error('Something went wrong!')
       })
   }
@@ -50,11 +59,11 @@ export default function Navbar() {
             </Link>
             <Link href="/">
               <MenuItem onClick={handleSignout}>Log out</MenuItem>
-            </Link>  
+            </Link>
           </>
         ) : (
           <Link href="/login">
-              <MenuItem>Log in</MenuItem>
+            <MenuItem>Log in</MenuItem>
           </Link>
         )}
       </Typography>
@@ -67,7 +76,7 @@ export default function Navbar() {
     }
 
     const handleDrawerClose = () => {
-      setDrawerOpen(false);
+      setDrawerOpen(false)
     }
 
     return (
@@ -78,7 +87,7 @@ export default function Navbar() {
             color: 'inherit',
             'aria-label': 'menu',
             'aria-haspopup': 'true',
-            onClick: handleDrawerOpen
+            onClick: handleDrawerOpen,
           }}
         >
           <MenuIcon />
@@ -90,14 +99,10 @@ export default function Navbar() {
             onClose: handleDrawerClose,
           }}
         >
-          <Box width={200}>
-            {getDrawerChoices()}
-          </Box>
+          <Box width={200}>{getDrawerChoices()}</Box>
         </Drawer>
         <Typography className={classes.homeLink} variant="h6">
-          <Link href="/">
-            Job Listings
-          </Link>
+          <Link href="/">Job Listings</Link>
         </Typography>
       </Toolbar>
     )
@@ -107,27 +112,19 @@ export default function Navbar() {
     return (
       <Toolbar className={classes.toolbar}>
         <Typography className={classes.homeLink} variant="h6">
-          <Link href="/">
-            Job Listings
-          </Link>
+          <Link href="/">Job Listings</Link>
         </Typography>
         <Typography variant="button" className={classes.links}>
-          <Link href="/jobs">
-            All jobs
-          </Link>
+          <Link href="/jobs">All jobs</Link>
           {auth.user ? (
             <>
-              <Link href="/post">
-                Post a job
-              </Link>
+              <Link href="/post">Post a job</Link>
               <Link href="/">
                 <a onClick={handleSignout}>Log out</a>
-              </Link>  
+              </Link>
             </>
           ) : (
-            <Link href="/login">
-              Log in
-            </Link>
+            <Link href="/login">Log in</Link>
           )}
         </Typography>
       </Toolbar>

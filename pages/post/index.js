@@ -1,21 +1,37 @@
-import { useRequireAuth, useAuth, useForm, useCheckMobileView } from '../../lib/hooks'
+import {
+  useRequireAuth,
+  useAuth,
+  useForm,
+  useCheckMobileView,
+} from '../../lib/hooks'
 import { firestore, serverTimestamp } from '../../lib/firebase'
-import { validate, EMAIL_REGEX_STRING, PHONE_REGEX_STRING } from '../../lib/util'
+import {
+  validate,
+  EMAIL_REGEX_STRING,
+  PHONE_REGEX_STRING,
+} from '../../lib/util'
 import CenteredCard from '../../components/CenteredCard'
 import { Button as SubmitButton } from '../../components/ContainedPrimarySubmitBtn'
-import { Grid, Select, MenuItem, InputLabel, TextField, CardActions } from '@material-ui/core'
+import {
+  Grid,
+  Select,
+  MenuItem,
+  InputLabel,
+  TextField,
+  CardActions,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
-import kebabCase from 'lodash.kebabcase';
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+import kebabCase from 'lodash.kebabcase'
 
 const useStyles = makeStyles({
   root: {
-    padding: 50
+    padding: 50,
   },
   description: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 })
 
 export default function PostForm() {
@@ -24,7 +40,7 @@ export default function PostForm() {
   if (!auth.user) {
     return <p>Loading...</p>
   }
-  
+
   return (
     <main>
       <CreateNewPost />
@@ -38,17 +54,17 @@ function CreateNewPost() {
   // if field is NOT required: define default as an object with field value called "data"
   const initialValues = {
     position: {
-      data: 'fullTime'
+      data: 'fullTime',
     },
     location: '',
     title: '',
     description: '',
     phone: {
-      data: ''
+      data: '',
     },
-    email: ''
+    email: '',
   }
-  
+
   const router = useRouter()
   const classes = useStyles()
   const auth = useAuth()
@@ -62,7 +78,7 @@ function CreateNewPost() {
         if (k === 'data') {
           formData = {
             ...formData,
-            [key]: v
+            [key]: v,
           }
         }
       }
@@ -70,7 +86,7 @@ function CreateNewPost() {
 
     if (Object.keys(errors).length > 0) {
       toast.error('Something went wrong when submitting the form.')
-      console.warn({errors});
+      console.warn({ errors })
       return
     }
 
@@ -84,7 +100,7 @@ function CreateNewPost() {
       uid: auth.user.uid,
       createdAt: serverTimestamp(),
       slug,
-      ...formData
+      ...formData,
     }
 
     try {
@@ -92,24 +108,26 @@ function CreateNewPost() {
       toast.success('Created new job post successfully!')
       router.push(`/post/${slug}`)
     } catch (error) {
-      console.warn({error});
+      console.warn({ error })
       toast.error('Something went wrong!')
     }
   }
 
-  const {
-    values,
-    errors,
-    handleChange,
-    handleSubmit,
-  } = useForm(initialValues, handleSubmitForm, validate)
+  const { values, errors, handleChange, handleSubmit } = useForm(
+    initialValues,
+    handleSubmitForm,
+    validate,
+  )
 
   // url safe slug
   const slug = encodeURI(kebabCase(values.title.data))
 
   return (
     <main>
-      <CenteredCard title="Post new job" maxWidth={mobileView ? '100%' : 928}>
+      <CenteredCard
+        title="Post new job"
+        maxWidth={mobileView ? '100%' : 928}
+      >
         <section>
           <form onSubmit={handleSubmit} noValidate autoComplete="off">
             <Grid
@@ -127,9 +145,9 @@ function CreateNewPost() {
                   defaultValue="fullTime"
                   value={values.position.data || ''}
                 >
-                  <MenuItem value={"fullTime"}>Full Time</MenuItem>
-                  <MenuItem value={"partTime"}>Part Time</MenuItem>
-                  <MenuItem value={"contract"}>Contract</MenuItem>
+                  <MenuItem value={'fullTime'}>Full Time</MenuItem>
+                  <MenuItem value={'partTime'}>Part Time</MenuItem>
+                  <MenuItem value={'contract'}>Contract</MenuItem>
                 </Select>
               </Grid>
               <Grid item xs={6}>
@@ -145,7 +163,7 @@ function CreateNewPost() {
                   value={values.location.data || ''}
                   inputProps={{
                     'data-required': true,
-                    'data-minlength': 2
+                    'data-minlength': 2,
                   }}
                 />
               </Grid>
@@ -162,7 +180,7 @@ function CreateNewPost() {
                   value={values.title.data || ''}
                   inputProps={{
                     'data-required': true,
-                    'data-minlength': 4
+                    'data-minlength': 4,
                   }}
                 />
               </Grid>
@@ -181,7 +199,7 @@ function CreateNewPost() {
                   value={values.description.data || ''}
                   inputProps={{
                     'data-required': true,
-                    'data-minlength': 25
+                    'data-minlength': 25,
                   }}
                 />
               </Grid>
@@ -199,7 +217,7 @@ function CreateNewPost() {
                     'data-required': false,
                     'data-test': true,
                     'data-regex': PHONE_REGEX_STRING,
-                    'data-regexflags': 'im'
+                    'data-regexflags': 'im',
                   }}
                 />
               </Grid>
@@ -216,12 +234,14 @@ function CreateNewPost() {
                   inputProps={{
                     'data-required': true,
                     'data-test': true,
-                    'data-regex': EMAIL_REGEX_STRING
+                    'data-regex': EMAIL_REGEX_STRING,
                   }}
                 />
               </Grid>
               <CardActions className={classes.actions}>
-                <SubmitButton disabled={Object.keys(errors).length > 0}>
+                <SubmitButton
+                  disabled={Object.keys(errors).length > 0}
+                >
                   Post
                 </SubmitButton>
               </CardActions>

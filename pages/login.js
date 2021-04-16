@@ -4,16 +4,16 @@ import { validate, EMAIL_REGEX_STRING } from '../lib/util'
 import { useState } from 'react'
 import { CardActions, TextField, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 import CenteredCard from '../components/CenteredCard'
 import { Button as SubmitButton } from '../components/ContainedPrimarySubmitBtn'
 
 const useStyles = makeStyles({
   actions: {
     marginTop: 20,
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 })
 
 export default function Login() {
@@ -29,18 +29,18 @@ export default function Login() {
 function LogInForm() {
   const initialValues = {
     email: '',
-    password: ''
+    password: '',
   }
   const [newUser, setNewUser] = useState(false)
 
   const auth = useAuth()
   const classes = useStyles()
   const router = useRouter()
-  
+
   const handleSubmitForm = (e) => {
     if (Object.keys(errors).length > 0) {
       toast.error('Something went wrong when submitting the form.')
-      console.warn({errors});
+      console.warn({ errors })
       return
     }
 
@@ -48,7 +48,7 @@ function LogInForm() {
       // new user
       auth
         .signup(values.email.data, values.password.data)
-        .then(({user}) => {
+        .then(({ user }) => {
           const userDoc = firestore.doc(`users/${user.email}`)
 
           const batch = firestore.batch()
@@ -59,7 +59,7 @@ function LogInForm() {
           toast.success('New account created!')
         })
         .catch((error) => {
-          console.warn({error})
+          console.warn({ error })
           toast.error('Something went wrong!')
         })
     } else {
@@ -71,7 +71,7 @@ function LogInForm() {
           toast.success('Logged in successfully!')
         })
         .catch((error) => {
-          console.warn({error})
+          console.warn({ error })
           toast.error('Something went wrong!')
         })
     }
@@ -79,12 +79,11 @@ function LogInForm() {
     setNewUser(false)
   }
 
-  const {
-    values,
-    errors,
-    handleChange,
-    handleSubmit,
-  } = useForm(initialValues, handleSubmitForm, validate)
+  const { values, errors, handleChange, handleSubmit } = useForm(
+    initialValues,
+    handleSubmitForm,
+    validate,
+  )
 
   return (
     <section>
@@ -105,7 +104,7 @@ function LogInForm() {
               inputProps={{
                 'data-required': true,
                 'data-test': true,
-                'data-regex': EMAIL_REGEX_STRING
+                'data-regex': EMAIL_REGEX_STRING,
               }}
             />
           </Grid>
@@ -123,14 +122,16 @@ function LogInForm() {
               value={values.password.data || ''}
               inputProps={{
                 'data-required': true,
-                'data-minlength': 6
+                'data-minlength': 6,
               }}
             />
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <CardActions className={classes.actions}>
-            <SubmitButton disabled={Object.keys(errors).length > 0}>Log In</SubmitButton>
+            <SubmitButton disabled={Object.keys(errors).length > 0}>
+              Log In
+            </SubmitButton>
             <SubmitButton
               disabled={Object.keys(errors).length > 0}
               onClick={() => setNewUser(true)}
