@@ -44,13 +44,9 @@ function JobItem({ job }) {
 }
 
 function printPositionType(position) {
-  switch (position) {
-    case 'fullTime':
-      return 'Full Time'
-    case 'partTime':
-      return 'Part Time'
-    case 'contract':
-      return 'Contract'
-    default: return 'Full Time'
-  } 
+  return new Map([
+    ["fullTime", "Full Time"],
+    ["partTime", "Part Time"],
+    ["contract", "Contract"]
+  ]).get(position)
 }
