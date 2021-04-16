@@ -18,7 +18,9 @@ export default function CenteredCard(props) {
           margin: 'auto',
         }}
       >
-        <Card style={{ width: props.maxWidth ?? defaultMaxWidth }}>
+        <Card
+          style={{ width: props.contentWidth ?? defaultMaxWidth }}
+        >
           <CardContent>{props.children}</CardContent>
         </Card>
       </Grid>
