@@ -18,7 +18,7 @@ function JobItem({ job }) {
             <Box display="flex" flexDirection="row">
               <Box flexGrow="1" mr={1.5}>
                 <Typography variant="body2">
-                  <Link href={`/post/${job.slug}`}>{job.title}</Link>
+                  <Link href={`/jobs/${job.slug}`}>{job.title}</Link>
                 </Typography>
               </Box>
               <Typography variant="caption">

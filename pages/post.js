@@ -4,15 +4,15 @@ import {
   useForm,
   useCheckMobileView,
   useCheckIfDocExists,
-} from '../../lib/hooks'
-import { firestore, serverTimestamp } from '../../lib/firebase'
+} from '../lib/hooks'
+import { firestore, serverTimestamp } from '../lib/firebase'
 import {
   validate,
   EMAIL_REGEX_STRING,
   PHONE_REGEX_STRING,
-} from '../../lib/util'
-import CenteredCard from '../../components/CenteredCard'
-import { Button as SubmitButton } from '../../components/ContainedPrimarySubmitBtn'
+} from '../lib/util'
+import CenteredCard from '../components/CenteredCard'
+import { Button as SubmitButton } from '../components/ContainedPrimarySubmitBtn'
 import {
   Grid,
   Select,
@@ -107,7 +107,7 @@ function CreateNewPost() {
     try {
       await ref.set(data)
       toast.success('Created new job post successfully!')
-      router.push(`/post/${slug}`)
+      router.push(`/jobs/${slug}`)
     } catch (error) {
       console.warn({ error })
       toast.error('Something went wrong!')
