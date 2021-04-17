@@ -6,7 +6,7 @@ import {
 } from '../../lib/firebase'
 import Jobs from '../../components/Jobs'
 import Loader from '../../components/Loader'
-import { Grid, Box, Button } from '@material-ui/core'
+import { Grid, Box, Button, Typography } from '@material-ui/core'
 
 const LIMIT = 10
 
@@ -27,6 +27,8 @@ export default function AllJobs(props) {
   const [jobs, setJobs] = useState(props.jobs)
   const [loading, setLoading] = useState(false)
   const [jobsEnd, setJobsEnd] = useState(false)
+
+  const { isFeatured } = props
 
   const fetchMoreJobs = async () => {
     setLoading(true)
@@ -55,36 +57,42 @@ export default function AllJobs(props) {
 
   return (
     <main>
-      <h1 style={{ textAlign: 'center' }}>
-        Showing {jobs.length} of {jobs.length} jobs
-      </h1>
+      {!isFeatured && (
+        <Box textAlign="center">
+          <Typography variant="h4">
+            Showing {jobs.length} of {jobs.length} jobs
+          </Typography>
+        </Box>
+      )}
       <Jobs jobs={jobs} />
       {loading && (
         <Box mt={4}>
           <Loader show={loading} />
         </Box>
       )}
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        display="flex"
-        m={2}
-      >
-        <Box mt={4}>
-          {!loading && !jobsEnd && (
-            <Button
-              variant="contained"
-              color="primary"
-              type="button"
-              onClick={fetchMoreJobs}
-            >
-              Load more
-            </Button>
-          )}
-          {jobsEnd && 'No more job posts to fetch'}
-        </Box>
-      </Grid>
+      {!isFeatured && (
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          display="flex"
+          m={2}
+        >
+          <Box mt={4}>
+            {!loading && !jobsEnd && (
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                onClick={fetchMoreJobs}
+              >
+                Load more
+              </Button>
+            )}
+            {jobsEnd && 'No more job posts to fetch'}
+          </Box>
+        </Grid>
+      )}
     </main>
   )
 }
