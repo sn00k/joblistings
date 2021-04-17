@@ -58,7 +58,7 @@ export default function AllJobs(props) {
   return (
     <main>
       {!isFeatured && (
-        <Box textAlign="center">
+        <Box textAlign="center" marginBottom={2}>
           <Typography variant="h4">
             Showing {jobs.length} of {jobs.length} jobs
           </Typography>

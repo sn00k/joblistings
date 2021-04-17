@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   Typography,
+  Box,
 } from '@material-ui/core'
 
 export default function CenteredCard(props) {
@@ -14,7 +15,9 @@ export default function CenteredCard(props) {
   return (
     <>
       <Grid container direction="row" justify="center">
-        <Typography variant="h4">{props.title}</Typography>
+        <Box marginBottom={2}>
+          <Typography variant="h4">{props.title}</Typography>
+        </Box>
       </Grid>
       <Grid
         container

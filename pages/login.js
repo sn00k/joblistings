@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 export default function Login() {
   return (
     <main>
-      <CenteredCard title="Login/Create account" maxWidth="unset">
+      <CenteredCard title="Login/Create account" maxWidth="500px">
         <LogInForm />
       </CenteredCard>
     </main>
