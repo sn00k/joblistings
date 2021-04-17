@@ -101,13 +101,14 @@ function CreateNewPost() {
       uid: auth.user.uid,
       createdAt: serverTimestamp(),
       slug,
+      featured: false,
       ...formData,
     }
 
     try {
       await ref.set(data)
       toast.success('Created new job post successfully!')
-      router.push(`/jobs/${slug}`)
+      router.push(`/jobs/${auth.user.uid}/${slug}`)
     } catch (error) {
       console.warn({ error })
       toast.error('Something went wrong!')
