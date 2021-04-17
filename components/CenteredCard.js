@@ -1,12 +1,23 @@
-import { Grid, Card, CardContent } from '@material-ui/core'
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+} from '@material-ui/core'
 
 export default function CenteredCard(props) {
-  const defaultMaxWidth = 928
+  const defaults = {
+    maxWidth: 928,
+    outerWrapperMarginBot: 24,
+  }
 
   return (
     <>
       <Grid container direction="row" justify="center">
-        <h1>{props.title}</h1>
+        <Box marginBottom={2}>
+          <Typography variant="h4">{props.title}</Typography>
+        </Box>
       </Grid>
       <Grid
         container
@@ -14,12 +25,14 @@ export default function CenteredCard(props) {
         justify="center"
         alignItems="center"
         style={{
-          maxWidth: props.maxWidth ?? defaultMaxWidth,
+          maxWidth: props.maxWidth ?? defaults.maxWidth,
           margin: 'auto',
+          marginBottom:
+            props.wrapperMarginBot ?? defaults.outerWrapperMarginBot,
         }}
       >
         <Card
-          style={{ width: props.contentWidth ?? defaultMaxWidth }}
+          style={{ width: props.contentWidth ?? defaults.maxWidth }}
         >
           <CardContent>{props.children}</CardContent>
         </Card>
