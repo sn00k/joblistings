@@ -10,6 +10,8 @@ Open [http://localhost:3000](http://localhost:3000)
 
 -----------
 
+[DEMO](https://jobs.robins.nu)
+
 ### todo
 * add a more complete solution for featured jobs
 * add companyName document to store
