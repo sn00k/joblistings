@@ -60,7 +60,7 @@ function LogInForm() {
         })
         .catch((error) => {
           console.warn({ error })
-          toast.error('Something went wrong!')
+          toast.error(`Error: ${error.message}`)
         })
     } else {
       // login
@@ -72,7 +72,7 @@ function LogInForm() {
         })
         .catch((error) => {
           console.warn({ error })
-          toast.error('Something went wrong!')
+          toast.error(`Error: ${error.message}`)
         })
     }
 
