@@ -2,9 +2,9 @@
 npm i
 
 npm run dev
-# or
-yarn dev
 ```
+
+See `.env.example` and create your own `.env`.
 
 Open [http://localhost:3000](http://localhost:3000)
 
