@@ -48,11 +48,11 @@ function LogInForm() {
       // new user
       auth
         .signup(values.email.data, values.password.data)
-        .then(({ user }) => {
-          const userDoc = firestore.doc(`users/${user.email}`)
+        .then(({ email, uid }) => {
+          const userDoc = firestore.doc(`users/${email}`)
 
           const batch = firestore.batch()
-          batch.set(userDoc, { uid: user.uid })
+          batch.set(userDoc, { uid })
           batch.commit()
 
           router.push('/')
